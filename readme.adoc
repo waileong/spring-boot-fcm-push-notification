@@ -1,0 +1,86 @@
+= Spring Boot and Firebase Cloud Messaging (FCM) Integration via REST API for Push Notifications
+
+This project demonstrates how to integrate Spring Boot with Firebase Cloud Messaging (FCM) for sending push notifications, leveraging the latest features of JDK 17 or JDK 21 for optimal performance. It uses virtual threads available in JDK 21 to improve scalability and concurrency, and communicates directly with FCM using pure REST API calls. This approach reduces the application's dependency footprint by avoiding the `com.google.firebase:firebase-admin` dependency.
+
+== Features
+
+* *Direct FCM Integration via REST API*: Interfaces with FCM through REST API calls, circumventing the need for the `com.google.firebase:firebase-admin` SDK.
+
+* *Virtual Thread Support*: Takes advantage of JDK 21's virtual threads for enhanced concurrency and scalability, particularly beneficial for I/O-bound operations. The application remains fully functional under JDK 17, albeit without the benefits of virtual threads.
+
+* *Spring Boot Configuration*: Focuses on a minimalist configuration approach within Spring Boot to maintain configurability and flexibility.
+
+* *Robust Error Handling*: Ensures reliable delivery of notifications through comprehensive error handling for REST interactions with FCM.
+
+* *Efficient JWT Token Management*: Implements efficient JWT token management for FCM authentication, optimized for REST API usage.
+
+== Prerequisites
+
+Before starting, ensure you have:
+
+- JDK 17 or JDK 21 (for virtual thread optimization)
+- Gradle Wrapper 8.6 (included in the project)
+- An FCM-configured Firebase project with REST API access
+
+== Getting Started
+
+Follow these steps to get the project running locally:
+
+1. Clone the repository:
++
+[source,shell]
+----
+git clone https://github.com/waileong/spring-boot-fcm-push-notification.git
+----
+
+2. Navigate to the project directory:
++
+[source,shell]
+----
+cd spring-boot-fcm-push-notification
+----
+
+3. Configure FCM for REST API access with your API keys and tokens.
+
+4. Build the project using the Gradle Wrapper to ensure compatibility with Gradle 8.6:
++
+[source,shell]
+----
+./gradlew build
+----
+
+== Usage
+
+To send notifications through FCM using the REST API, utilize the `FcmService`:
+
+[source,java]
+----
+@Autowired
+private FcmService fcmService;
+
+public void sendNotification(FcmSendRequest request) {
+    // Define notification details here
+    fcmService.send(request);
+}
+----
+
+== Optimizing Dependencies
+
+Make sure your `build.gradle` or `pom.xml` excludes the Firebase Admin SDK, focusing instead on libraries essential for REST API communication.
+
+Employ Spring's `RestTemplate` for FCM interactions, following modern HTTP communication best practices.
+
+== Configuration for JDK 21 Virtual Threads
+
+For users on JDK 21 looking to enable virtual threads:
+
+[source,properties]
+----
+spring.threads.virtual.enabled=true
+----
+
+This enhances the application's performance and resource management by leveraging JDK 21's concurrency improvements.
+
+== License
+
+Licensed under the MIT License. See `LICENSE.adoc` for full details.

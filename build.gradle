@@ -1,0 +1,54 @@
+plugins {
+    id "org.springframework.boot" version "${spring_boot_version}"
+    id 'io.spring.dependency-management' version "${spring_dependency_management_version}"
+}
+
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'java'
+apply plugin: 'java-library'
+
+
+group = 'io.github.waileong'
+version = '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+bootJar {
+    enabled = false
+}
+
+dependencies {
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    implementation("org.apache.commons:commons-pool2:$commons_pool2_version")
+    implementation("io.jsonwebtoken:jjwt-api:$jjwt_version")
+    implementation("io.jsonwebtoken:jjwt-impl:$jjwt_version")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwt_version")
+
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}
