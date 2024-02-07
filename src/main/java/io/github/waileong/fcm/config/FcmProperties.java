@@ -28,7 +28,6 @@ import java.time.Duration;
  * fcm.jwtTokenPoolSetting.maxTotal=20
  * fcm.jwtTokenPoolSetting.maxIdle=10
  * </pre>
- * </p>
  *
  * @author Wai Leong
  */

@@ -49,6 +49,32 @@ cd spring-boot-fcm-push-notification
 ./gradlew build
 ----
 
+== Including the Library
+
+=== Gradle
+
+Add the following to your `build.gradle`:
+
+----
+dependencies {
+    implementation 'io.github.waileong:spring-boot-fcm:1.0.0'
+}
+----
+
+=== Maven
+
+Insert this dependency in your `pom.xml`:
+
+----
+<dependencies>
+    <dependency>
+        <groupId>io.github.waileong</groupId>
+        <artifactId>spring-boot-fcm</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+</dependencies>
+----
+
 == Usage
 
 To send notifications through FCM using the REST API, utilize the `FcmService`:
@@ -68,7 +94,7 @@ public void sendNotification(FcmSendRequest request) {
 
 Make sure your `build.gradle` or `pom.xml` excludes the Firebase Admin SDK, focusing instead on libraries essential for REST API communication.
 
-Employ Spring's `RestTemplate` for FCM interactions, following modern HTTP communication best practices.
+Employ Spring's `RestClient` for FCM interactions, following modern HTTP communication best practices.
 
 == Configuration for JDK 21 Virtual Threads
 

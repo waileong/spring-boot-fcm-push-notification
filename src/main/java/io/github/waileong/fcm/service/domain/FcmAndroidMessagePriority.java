@@ -9,7 +9,7 @@ package io.github.waileong.fcm.service.domain;
  * <li>{@code NORMAL} - The message might be delayed to conserve battery.</li>
  * <li>{@code HIGH} - The message is sent immediately and might wake a sleeping device.</li>
  * </ul>
- * </p>
+ *
  * <p>
  * For more information on Android message priority, see the official Firebase documentation:
  * <a href="https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#androidmessagepriority">AndroidMessagePriority</a>
