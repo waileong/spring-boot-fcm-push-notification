@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'io.github.waileong'
-version = '1.0.0'
+version = '1.0.1-SNAPSHOT'
 
 java {
     toolchain {
@@ -26,23 +26,24 @@ dependencies {
     // Spring Boot BOM for dependency management
     implementation platform("org.springframework.boot:spring-boot-dependencies:$spring_boot_version")
 
+    implementation("org.apache.commons:commons-lang3")
     // Spring Boot starters
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
     // Additional dependencies
-    implementation "org.apache.commons:commons-pool2:$commons_pool2_version"
-    implementation "io.jsonwebtoken:jjwt-api:$jjwt_version"
-    implementation "io.jsonwebtoken:jjwt-impl:$jjwt_version"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:$jjwt_version"
+    implementation("org.apache.commons:commons-pool2:$commons_pool2_version")
+    implementation("io.jsonwebtoken:jjwt-api:$jjwt_version")
+    implementation("io.jsonwebtoken:jjwt-impl:$jjwt_version")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwt_version")
 
     // Annotation processor
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version"
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version")
 
     // Testing dependencies
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation "org.junit.jupiter:junit-jupiter"
-    testImplementation "org.assertj:assertj-core"
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core")
 }
 
 // Java compile options
@@ -180,7 +181,7 @@ tasks.register('bundleJars', Zip) {
 
     // Configure the ZIP archive's destination and name
     archiveBaseName.set(rootProject.name)
-    archiveVersion.set('1.0.0')
+    archiveVersion.set(version)
     destinationDirectory.set(file("$buildDir/distributions"))
 
     // Specify the directory to zip, which is the specific folder structure used in prepareBundleJars task

@@ -21,6 +21,7 @@ import org.springframework.web.client.RestClient;
 import java.net.http.HttpClient;
 import java.util.concurrent.Executor;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
 
 /**
@@ -59,7 +60,7 @@ public class FcmConnectionConfiguration {
             builder.connectTimeout(connection.getConnectTimeout());
         }
         SslBundles sslBundles = sslBundlesObjectProvider.getIfAvailable();
-        if (sslBundles != null && !connection.getSslBundleName().isEmpty()) {
+        if (sslBundles != null && !isBlank(connection.getSslBundleName())) {
             SslBundle bundle = sslBundles.getBundle(connection.getSslBundleName());
             builder.sslContext(bundle.createSslContext());
         }
@@ -139,8 +140,10 @@ public class FcmConnectionConfiguration {
             @Qualifier("fcmRestClientResponseErrorHandler") FcmRestClientResponseErrorHandler fcmRestClientResponseErrorHandler,
             FcmProperties fcmProperties) {
         String projectId = fcmProperties.getCredential().getProjectId();
-        if (projectId == null || projectId.isEmpty()) {
-            throw new IllegalArgumentException("Project ID is required for FCM");
+        if (isBlank(projectId)) {
+            throw new IllegalArgumentException("A Project ID is required for Firebase Cloud Messaging (FCM). " +
+                    "Please retrieve it from the 'project_id' field in the downloaded Firebase Admin SDK JSON file. " +
+                    "Then, input it into the configuration for fcm.credential.project-id");
         }
         return RestClient.builder()
                 .baseUrl("https://fcm.googleapis.com/v1/projects/" + projectId + "/messages:send")

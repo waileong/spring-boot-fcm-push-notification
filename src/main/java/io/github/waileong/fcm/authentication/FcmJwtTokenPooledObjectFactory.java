@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.util.Date;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 /**
  * A factory for creating, wrapping, and validating {@link FcmJwtToken} objects for use in a pool.
  * This class extends {@link BasePooledObjectFactory} and is tailored to generate JWT tokens required
@@ -54,6 +56,27 @@ public class FcmJwtTokenPooledObjectFactory extends BasePooledObjectFactory<FcmJ
         String privateKeyId = credential.getPrivateKeyId();
         String clientEmail = credential.getClientEmail();
         String privateKey = credential.getPrivateKey();
+
+        if (isBlank(privateKeyId)) {
+            throw new IllegalArgumentException(
+                    "A Private Key ID is required for Firebase Cloud Messaging (FCM). " +
+                            "Please retrieve it from the 'private_key_id' field in the downloaded Firebase Admin SDK JSON file. " +
+                            "Then, input it into the configuration for fcm.credential.private-key-id");
+        }
+        if (isBlank(privateKey)) {
+            throw new IllegalArgumentException(
+                    "A Private Key is required for Firebase Cloud Messaging (FCM). " +
+                            "Please retrieve it from the 'private_key' field in the downloaded Firebase Admin SDK JSON file. " +
+                            "Then, input it into the configuration for fcm.credential.private-key");
+        }
+        if (isBlank(clientEmail)) {
+            throw new IllegalArgumentException(
+                    "A Client Email is required for Firebase Cloud Messaging (FCM). " +
+                            "Please retrieve it from the 'client_email' field in the downloaded Firebase Admin SDK JSON file. " +
+                            "Then, input it into the configuration for fcm.credential.client-email");
+        }
+
+
         Date issuedAt = Date.from(now);
         Date expireAt = Date.from(expiration);
         String token = Jwts.builder()
