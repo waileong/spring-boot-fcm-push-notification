@@ -2,8 +2,6 @@ package io.github.waileong.fcm.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.waileong.fcm.authentication.FcmJwtToken;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import io.github.waileong.fcm.exception.FcmRestClientResponseErrorHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -121,13 +119,11 @@ public class FcmConnectionConfiguration {
 
     /**
      * Configures and provides a {@link RestClient} tailored for FCM communication. This REST client is configured
-     * with FCM-specific headers, message converters, error handlers, and a token-based authentication mechanism
-     * leveraging a JWT token pool. It is designed for sending messages to FCM services, using a base URL constructed
+     * with FCM-specific headers, message converters, and error handlers. It is designed for sending messages to FCM services, using a base URL constructed
      * from the provided FCM project ID.
      *
      * @param fcmClientHttpRequestFactory       The HTTP request factory for FCM.
      * @param fcmMessageConverter               The message converter for FCM.
-     * @param googleFcmJwtTokenPool             A pool of JWT tokens for FCM authentication.
      * @param fcmRestClientResponseErrorHandler The error handler for FCM responses.
      * @param fcmProperties                     Properties containing the FCM credential and project ID.
      * @return A configured {@link RestClient} instance for FCM communication.
@@ -136,7 +132,6 @@ public class FcmConnectionConfiguration {
     public RestClient fcmRestClient(
             @Qualifier("fcmClientHttpRequestFactory") ClientHttpRequestFactory fcmClientHttpRequestFactory,
             @Qualifier("fcmMessageConverter") MappingJackson2HttpMessageConverter fcmMessageConverter,
-            @Qualifier("fcmJwtTokenPool") GenericObjectPool<FcmJwtToken> googleFcmJwtTokenPool,
             @Qualifier("fcmRestClientResponseErrorHandler") FcmRestClientResponseErrorHandler fcmRestClientResponseErrorHandler,
             FcmProperties fcmProperties) {
         String projectId = fcmProperties.getCredential().getProjectId();
@@ -149,7 +144,6 @@ public class FcmConnectionConfiguration {
                 .baseUrl("https://fcm.googleapis.com/v1/projects/" + projectId + "/messages:send")
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeaders(httpHeaders -> httpHeaders.setBearerAuth(getAccessToken(googleFcmJwtTokenPool)))
                 .requestFactory(fcmClientHttpRequestFactory)
                 .messageConverters(httpMessageConverters -> {
                     // override the default message converters
@@ -160,24 +154,5 @@ public class FcmConnectionConfiguration {
                 .build();
     }
 
-    /**
-     * Retrieves an access token from the JWT token pool for authenticating FCM requests. This method ensures
-     * that a valid token is always used for authentication by borrowing from and returning tokens to the pool.
-     *
-     * @param pool The pool of FCM JWT tokens.
-     * @return A valid JWT token string for FCM authentication.
-     */
-    private String getAccessToken(GenericObjectPool<FcmJwtToken> pool) {
-        FcmJwtToken fcmJwtToken = null;
-        try {
-            fcmJwtToken = pool.borrowObject();
-            return fcmJwtToken.token();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (fcmJwtToken != null) {
-                pool.returnObject(fcmJwtToken);
-            }
-        }
-    }
+
 }
