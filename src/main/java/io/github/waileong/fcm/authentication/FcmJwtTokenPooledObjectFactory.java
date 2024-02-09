@@ -1,12 +1,12 @@
 package io.github.waileong.fcm.authentication;
 
+import io.github.waileong.fcm.config.FcmProperties;
+import io.github.waileong.fcm.util.RSAKeyPairUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-import io.github.waileong.fcm.config.FcmProperties;
-import io.github.waileong.fcm.util.RSAKeyPairUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class FcmJwtTokenPooledObjectFactory extends BasePooledObjectFactory<FcmJ
     @Override
     public FcmJwtToken create() throws Exception {
         Instant now = Instant.now();
-        Instant expiration = now.plusSeconds(3600);
+        Instant expiration = now.plus(credential.getJwtExpireDuration());
         String privateKeyId = credential.getPrivateKeyId();
         String clientEmail = credential.getClientEmail();
         String privateKey = credential.getPrivateKey();

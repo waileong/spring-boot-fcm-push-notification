@@ -193,6 +193,10 @@ public class FcmProperties {
          * The client email associated with the Firebase service account, used for authentication.
          */
         private String clientEmail;
+        /**
+         * The time period a JWT token remains valid, set to 1 hour by default.
+         */
+        private Duration jwtExpireDuration = Duration.ofHours(1);
 
         /**
          * Gets the project ID of the Firebase service account.
@@ -264,6 +268,24 @@ public class FcmProperties {
          */
         public void setClientEmail(String clientEmail) {
             this.clientEmail = clientEmail;
+        }
+
+        /**
+         * Gets the time period a JWT token remains valid.
+         *
+         * @return The duration a JWT token remains valid.
+         */
+        public Duration getJwtExpireDuration() {
+            return jwtExpireDuration;
+        }
+
+        /**
+         * Sets the time period a JWT token remains valid.
+         *
+         * @param jwtExpireDuration The duration a JWT token remains valid.
+         */
+        public void setJwtExpireDuration(Duration jwtExpireDuration) {
+            this.jwtExpireDuration = jwtExpireDuration;
         }
     }
 

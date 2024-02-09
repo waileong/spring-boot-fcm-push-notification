@@ -1,6 +1,8 @@
 package io.github.waileong.fcm.config;
 
+import io.github.waileong.fcm.authentication.FcmJwtToken;
 import io.github.waileong.fcm.service.impl.FcmServiceImpl;
+import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -42,7 +44,8 @@ public class FcmAutoConfiguration {
      * @return An instance of {@link FcmServiceImpl}, ready to be used for FCM operations within the application.
      */
     @Bean
-    public FcmServiceImpl fcmService(@Qualifier("fcmRestClient") RestClient fcmRestClient) {
-        return new FcmServiceImpl(fcmRestClient);
+    public FcmServiceImpl fcmService(@Qualifier("fcmRestClient") RestClient fcmRestClient,
+                                     @Qualifier("fcmJwtTokenPool") GenericObjectPool<FcmJwtToken> googleFcmJwtTokenPool) {
+        return new FcmServiceImpl(fcmRestClient, googleFcmJwtTokenPool);
     }
 }
