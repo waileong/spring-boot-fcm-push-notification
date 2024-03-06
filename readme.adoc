@@ -61,7 +61,7 @@ Add the following to your `build.gradle`:
 
 ----
 dependencies {
-    implementation 'io.github.waileong:spring-boot-fcm:1.0.3-SNAPSHOT
+    implementation 'io.github.waileong:spring-boot-fcm:1.0.3'
 }
 ----
 
@@ -74,7 +74,7 @@ Insert this dependency in your `pom.xml`:
     <dependency>
         <groupId>io.github.waileong</groupId>
         <artifactId>spring-boot-fcm</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </dependency>
 </dependencies>
 ----
