@@ -17,6 +17,10 @@ import java.util.Base64;
  */
 public class RSAKeyPairUtil {
 
+    private RSAKeyPairUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * Converts a base64 encoded string representation of an RSA private key into an {@link RSAPrivateKey} object.
      * <p>

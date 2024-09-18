@@ -3,8 +3,6 @@ package io.github.waileong.fcm.exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.waileong.fcm.service.domain.FcmErrorResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
@@ -18,7 +16,6 @@ import java.nio.charset.StandardCharsets;
  * @author Wai Leong
  **/
 public class FcmRestClientResponseErrorHandler extends DefaultResponseErrorHandler {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ObjectMapper objectMapper;
 
     public FcmRestClientResponseErrorHandler(ObjectMapper objectMapper) {

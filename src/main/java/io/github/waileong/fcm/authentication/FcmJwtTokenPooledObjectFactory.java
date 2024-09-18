@@ -7,8 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Date;
@@ -29,7 +27,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * @author Wai Leong
  */
 public class FcmJwtTokenPooledObjectFactory extends BasePooledObjectFactory<FcmJwtToken> {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final FcmProperties.Credential credential;
     private static final String FCM_ENDPOINT_URL = "https://fcm.googleapis.com/";
 
