@@ -7,8 +7,6 @@ import io.github.waileong.fcm.service.domain.FcmErrorResponse;
 import io.github.waileong.fcm.service.domain.FcmMessage;
 import io.github.waileong.fcm.service.domain.FcmSendRequest;
 import org.apache.commons.pool2.impl.GenericObjectPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.web.client.RestClient;
 
@@ -28,7 +26,6 @@ import org.springframework.web.client.RestClient;
  */
 @RegisterReflectionForBinding({FcmSendRequest.class, FcmMessage.class, FcmError.class, FcmErrorResponse.class})
 public class FcmServiceImpl implements FcmService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final RestClient fcmRestClient;
     private final GenericObjectPool<FcmJwtToken> fcmJwtTokenPool;
 
@@ -61,7 +58,7 @@ public class FcmServiceImpl implements FcmService {
             fcmJwtToken = pool.borrowObject();
             return fcmJwtToken.token();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         } finally {
             if (fcmJwtToken != null) {
                 pool.returnObject(fcmJwtToken);

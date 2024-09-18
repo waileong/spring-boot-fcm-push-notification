@@ -14,7 +14,7 @@ import io.github.waileong.fcm.service.domain.FcmError;
  */
 public class FcmRestClientException extends RuntimeException {
     private final int httpStatus;
-    private final FcmError error;
+    private final transient FcmError error;
 
     /**
      * Constructs a new FcmRestClientException with specified HTTP status code and FCM error details.

@@ -1,6 +1,6 @@
 = Spring Boot and Firebase Cloud Messaging (FCM) Integration via REST API for Push Notifications
 
-image:https://img.shields.io/badge/Spring%20Boot-3.2.x-brightgreen.svg[link="https://spring.io/projects/spring-boot"]
+image:https://img.shields.io/badge/Spring%20Boot-3.3.x-brightgreen.svg[link="https://spring.io/projects/spring-boot"]
 image:https://img.shields.io/badge/Java-17-blue.svg[link="https://adoptopenjdk.net/?variant=openjdk17&jvmVariant=hotspot"]
 image:https://img.shields.io/badge/Java-21-blue.svg[link="https://adoptopenjdk.net/?variant=openjdk21&jvmVariant=hotspot"]
 
@@ -61,7 +61,7 @@ Add the following to your `build.gradle`:
 
 ----
 dependencies {
-    implementation 'io.github.waileong:spring-boot-fcm:1.0.3'
+    implementation 'io.github.waileong:spring-boot-fcm:1.0.4'
 }
 ----
 
@@ -74,7 +74,7 @@ Insert this dependency in your `pom.xml`:
     <dependency>
         <groupId>io.github.waileong</groupId>
         <artifactId>spring-boot-fcm</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 </dependencies>
 ----

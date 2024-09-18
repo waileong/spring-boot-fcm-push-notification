@@ -1,14 +1,12 @@
 package io.github.waileong.fcm.service;
 
-import jakarta.validation.Validator;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import io.github.waileong.fcm.config.FcmAutoConfiguration;
 import io.github.waileong.fcm.service.domain.FcmMessage;
 import io.github.waileong.fcm.service.domain.FcmNotification;
 import io.github.waileong.fcm.service.domain.FcmSendRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Validator;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
 @Disabled
-public class FcmServiceTest {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+class FcmServiceTest {
 
     static {
         // Enable detailed HTTP client logging for debugging purposes
@@ -49,7 +46,7 @@ public class FcmServiceTest {
     private FcmService fcmService;
 
     @Test
-    public void testSendNotification() throws Exception {
+    void testSendNotification() {
         String deviceToken = "";
         String title = "FCM Title";
         String message = "FCM Message";
@@ -75,14 +72,14 @@ public class FcmServiceTest {
      */
     @Configuration(proxyBeanMethods = false)
     @Import({FcmAutoConfiguration.class, TaskExecutionAutoConfiguration.class})
-    public static class ContextConfiguration {
+    static class ContextConfiguration {
         @Bean
-        public Validator validator() {
+        Validator validator() {
             return new LocalValidatorFactoryBean();
         }
 
         @Bean
-        public MethodValidationPostProcessor methodValidationPostProcessor() {
+        MethodValidationPostProcessor methodValidationPostProcessor() {
             return new MethodValidationPostProcessor();
         }
     }
