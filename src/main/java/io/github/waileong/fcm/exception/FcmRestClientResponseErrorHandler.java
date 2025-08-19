@@ -3,11 +3,14 @@ package io.github.waileong.fcm.exception;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.waileong.fcm.service.domain.FcmErrorResponse;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -23,20 +26,18 @@ public class FcmRestClientResponseErrorHandler extends DefaultResponseErrorHandl
     }
 
     /**
-     * Handles the error in the client HTTP response.
-     * <p>
-     * This method checks if the response status code indicates a client (4xx) or server (5xx) error and attempts
-     * to deserialize the error response body into an {@link FcmErrorResponse} object. If successful, it throws
-     * an {@link FcmRestClientException} with the error details. Otherwise, it logs the issue and rethrows
-     * a generic {@link FcmRestClientException}.
-     * </p>
+     * Custom error handling method for HTTP responses in the FCM REST client. This method intercepts and processes
+     * HTTP responses with 4xx or 5xx status codes, extracting error details and throwing appropriate exceptions.
      *
-     * @param response   The client HTTP response with the error.
-     * @param statusCode The HTTP status code of the response.
-     * @throws IOException If an I/O error occurs.
+     * @param response   The {@link ClientHttpResponse} object representing the HTTP response.
+     * @param statusCode The {@link HttpStatusCode} of the response.
+     * @param url        The {@link URI} of the request, if available (nullable).
+     * @param method     The {@link HttpMethod} used for the request, if available (nullable).
+     * @throws IOException            If an I/O error occurs during error processing.
+     * @throws FcmRestClientException If the response contains client or server errors.
      */
     @Override
-    protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode) throws IOException {
+    protected void handleError(ClientHttpResponse response, HttpStatusCode statusCode, @Nullable URI url, @Nullable HttpMethod method) throws IOException {
         if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
             final String content = new String(getResponseBody(response), StandardCharsets.UTF_8);
             try {
@@ -51,7 +52,7 @@ public class FcmRestClientResponseErrorHandler extends DefaultResponseErrorHandl
                 throw new FcmRestClientException(statusCode.value(), ex.getMessage());
             }
         } else {
-            super.handleError(response, statusCode);
+            super.handleError(response, statusCode, url, method);
         }
     }
 }

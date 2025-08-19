@@ -3,7 +3,6 @@ package io.github.waileong.fcm.authentication;
 import io.github.waileong.fcm.config.FcmProperties;
 import io.github.waileong.fcm.util.RSAKeyPairUtil;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
@@ -11,7 +10,7 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import java.time.Instant;
 import java.util.Date;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.util.StringUtils.hasText;
 
 /**
  * A factory for creating, wrapping, and validating {@link FcmJwtToken} objects for use in a pool.
@@ -54,19 +53,19 @@ public class FcmJwtTokenPooledObjectFactory extends BasePooledObjectFactory<FcmJ
         String clientEmail = credential.getClientEmail();
         String privateKey = credential.getPrivateKey();
 
-        if (isBlank(privateKeyId)) {
+        if (!hasText(privateKeyId)) {
             throw new IllegalArgumentException(
                     "A Private Key ID is required for Firebase Cloud Messaging (FCM). " +
                             "Please retrieve it from the 'private_key_id' field in the downloaded Firebase Admin SDK JSON file. " +
                             "Then, input it into the configuration for fcm.credential.private-key-id");
         }
-        if (isBlank(privateKey)) {
+        if (!hasText(privateKey)) {
             throw new IllegalArgumentException(
                     "A Private Key is required for Firebase Cloud Messaging (FCM). " +
                             "Please retrieve it from the 'private_key' field in the downloaded Firebase Admin SDK JSON file. " +
                             "Then, input it into the configuration for fcm.credential.private-key");
         }
-        if (isBlank(clientEmail)) {
+        if (!hasText(clientEmail)) {
             throw new IllegalArgumentException(
                     "A Client Email is required for Firebase Cloud Messaging (FCM). " +
                             "Please retrieve it from the 'client_email' field in the downloaded Firebase Admin SDK JSON file. " +
@@ -76,15 +75,16 @@ public class FcmJwtTokenPooledObjectFactory extends BasePooledObjectFactory<FcmJ
 
         Date issuedAt = Date.from(now);
         Date expireAt = Date.from(expiration);
+
+        @SuppressWarnings("deprecation")
         String token = Jwts.builder()
-                .setHeaderParam("kid", privateKeyId)
-                .setHeaderParam("typ", "JWT")
-                .setIssuer(clientEmail)
-                .setSubject(clientEmail)
-                .setAudience(FCM_ENDPOINT_URL)
-                .setIssuedAt(issuedAt)
-                .setExpiration(expireAt)
-                .signWith(RSAKeyPairUtil.getPrivateKeyFromString(privateKey), SignatureAlgorithm.RS256)
+                .header().keyId(privateKeyId).type("JWT").and()
+                .issuer(clientEmail)
+                .subject(clientEmail)
+                .audience().single(FCM_ENDPOINT_URL) // the single string is needed for FCM
+                .issuedAt(issuedAt)
+                .expiration(expireAt)
+                .signWith(RSAKeyPairUtil.getPrivateKeyFromString(privateKey), Jwts.SIG.RS256)
                 .compact();
         return new FcmJwtToken(token, expireAt);
     }

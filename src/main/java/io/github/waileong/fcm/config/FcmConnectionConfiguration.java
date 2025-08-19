@@ -19,8 +19,8 @@ import org.springframework.web.client.RestClient;
 import java.net.http.HttpClient;
 import java.util.concurrent.Executor;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration.APPLICATION_TASK_EXECUTOR_BEAN_NAME;
+import static org.springframework.util.StringUtils.hasText;
 
 /**
  * Configuration class for managing connections to Firebase Cloud Messaging (FCM). This class provides beans to
@@ -58,7 +58,7 @@ public class FcmConnectionConfiguration {
             builder.connectTimeout(connection.getConnectTimeout());
         }
         SslBundles sslBundles = sslBundlesObjectProvider.getIfAvailable();
-        if (sslBundles != null && !isBlank(connection.getSslBundleName())) {
+        if (sslBundles != null && hasText(connection.getSslBundleName())) {
             SslBundle bundle = sslBundles.getBundle(connection.getSslBundleName());
             builder.sslContext(bundle.createSslContext());
         }
@@ -135,7 +135,7 @@ public class FcmConnectionConfiguration {
             @Qualifier("fcmRestClientResponseErrorHandler") FcmRestClientResponseErrorHandler fcmRestClientResponseErrorHandler,
             FcmProperties fcmProperties) {
         String projectId = fcmProperties.getCredential().getProjectId();
-        if (isBlank(projectId)) {
+        if (!hasText(projectId)) {
             throw new IllegalArgumentException("A Project ID is required for Firebase Cloud Messaging (FCM). " +
                     "Please retrieve it from the 'project_id' field in the downloaded Firebase Admin SDK JSON file. " +
                     "Then, input it into the configuration for fcm.credential.project-id");

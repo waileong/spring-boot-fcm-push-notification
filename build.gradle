@@ -25,7 +25,6 @@ dependencies {
     // Spring Boot BOM for dependency management
     implementation platform("org.springframework.boot:spring-boot-dependencies:$spring_boot_version")
 
-    implementation("org.apache.commons:commons-lang3")
     // Spring Boot starters
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -39,10 +38,11 @@ dependencies {
     // Annotation processor
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:$spring_boot_version")
 
+    api("org.jspecify:jspecify")
+
     // Testing dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.assertj:assertj-core")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 // Java compile options

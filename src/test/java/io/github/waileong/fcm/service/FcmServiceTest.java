@@ -1,6 +1,7 @@
 package io.github.waileong.fcm.service;
 
 import io.github.waileong.fcm.config.FcmAutoConfiguration;
+import io.github.waileong.fcm.config.JjwtNativeSupportAutoConfiguration;
 import io.github.waileong.fcm.service.domain.FcmMessage;
 import io.github.waileong.fcm.service.domain.FcmNotification;
 import io.github.waileong.fcm.service.domain.FcmSendRequest;
@@ -8,11 +9,11 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
@@ -71,7 +72,7 @@ class FcmServiceTest {
      * </p>
      */
     @Configuration(proxyBeanMethods = false)
-    @Import({FcmAutoConfiguration.class, TaskExecutionAutoConfiguration.class})
+    @ImportAutoConfiguration({FcmAutoConfiguration.class, JjwtNativeSupportAutoConfiguration.class, TaskExecutionAutoConfiguration.class})
     static class ContextConfiguration {
         @Bean
         Validator validator() {
