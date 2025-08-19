@@ -1,1 +1,2 @@
 io.github.waileong.fcm.config.FcmAutoConfiguration
+io.github.waileong.fcm.config.JjwtNativeSupportAutoConfiguration
